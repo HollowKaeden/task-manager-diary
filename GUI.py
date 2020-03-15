@@ -55,6 +55,9 @@ class main_window(QWidget):
         self.btn4.setGeometry(640, 10, 40, 30)
         self.btn4.setFont(font)
         self.btn4.clicked.connect(self.following_day)
+        hmrks = db.get_homework_lesson(day)
+        for i in range(9):
+            self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
         lessons = db.get_lessons(1)
         for i in range(9):
             self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
@@ -81,10 +84,11 @@ class main_window(QWidget):
             text1, ok1 = QInputDialog.getText(self, 'ДЗ',
                                               'Введите дз')
             if ok1:
-                hmrks = db.get_lessons(day)
                 db.reset_homework(db.get_id_lesson(day)[-(int(text))], text1)
+                hmrks = db.get_homework_lesson(day)
                 for i in range(9):
                     self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
+
 
     def add_notes(self):
         pass
@@ -97,6 +101,9 @@ class main_window(QWidget):
         lessons = db.get_lessons(day)
         for i in range(9):
             self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
+        hmrks = db.get_homework_lesson(day)
+        for i in range(9):
+            self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
         self.label_day.setText(db.get_day(day))
 
     def following_day(self):
@@ -107,6 +114,9 @@ class main_window(QWidget):
         lessons = db.get_lessons(day)
         for i in range(9):
             self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
+        hmrks = db.get_homework_lesson(day)
+        for i in range(9):
+            self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
         self.label_day.setText(db.get_day(day))
 
 
