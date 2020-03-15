@@ -25,7 +25,6 @@ class main_window(QWidget):
         self.table.setColumnWidth(0, 150)
         self.table.setColumnWidth(1, 275)
         self.table.setColumnWidth(2, 275)
-        self.table.activated[str].connect(self.add_lesson)
         self.btn = QPushButton(self)
         self.btn.setText('Добавить урок')
         self.btn.setGeometry(20, 10, 150, 30)
