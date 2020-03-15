@@ -74,7 +74,7 @@ def get_id_lesson(date):
         return lessons
 
 def reset_homework(id, text):
-    cursor.execute(f'UPDATE HOMEWORK SET text={text} WHERE schedule_id=?', (id, )).fetchall()
+    cursor.execute(f'UPDATE HOMEWORK SET text="{text}" WHERE schedule_id=?', (id, )).fetchall()
     conn.commit()
 
 def all_homework_day(day):
@@ -88,3 +88,22 @@ def all_homework_day(day):
     while len(homework) != 9:
         homework.insert(0, '')
     return homework
+
+
+def add_comment(lesson):
+    cursor.execute('INSERT INTO COMMENTS (schedule_id, comment) VALUES (?, ?)', (lesson, ''))
+    conn.commit()
+#///////////
+def get_comment_lesson(day):
+    hm = list(map(lambda x: x[0], cursor.execute('''SELECT cm.comment FROM EVENTS e 
+    INNER JOIN SCHEDULE s ON e.id = s.event_id INNER JOIN COMMENTS cm ON s.id = cm.schedule_id
+                             WHERE e.id=?''', (day, )).fetchall()))
+    hm = list(reversed(hm))
+    while len(hm) != 9:
+        hm.insert(0, '')
+    return hm
+
+
+def reset_comment(id, text):
+    cursor.execute(f'UPDATE COMMENTS SET comment="{text}" WHERE schedule_id=?', (id, )).fetchall()
+    conn.commit()

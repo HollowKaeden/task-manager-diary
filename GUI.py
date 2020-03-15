@@ -17,7 +17,7 @@ class main_window(QWidget):
         db.connect()
         day = 1
         font = QFont('Comic sans', 14)
-        self.setGeometry(1000, 600, 717, 600)
+        self.setGeometry(300, 300, 717, 600)
         self.setWindowTitle('Расписание')
         self.label_day= QLabel(self)
         self.label_day.setText('Понедельник')
@@ -45,6 +45,7 @@ class main_window(QWidget):
         self.btn2.setText('Добавить заметку')
         self.btn2.setGeometry(360, 10, 170, 30)
         self.btn2.setFont(font)
+        self.btn2.clicked.connect(self.add_notes)
         self.btn3 = QPushButton(self)
         self.btn3.setText('←')
         self.btn3.setGeometry(570, 10, 40, 30)
@@ -55,9 +56,15 @@ class main_window(QWidget):
         self.btn4.setGeometry(640, 10, 40, 30)
         self.btn4.setFont(font)
         self.btn4.clicked.connect(self.following_day)
+
         hmrks = db.get_homework_lesson(day)
         for i in range(9):
             self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
+
+        notes = db.get_comment_lesson(day)
+        for i in range(9):
+            self.table.setItem(i, 2, QTableWidgetItem(notes.pop()))
+
         lessons = db.get_lessons(1)
         for i in range(9):
             self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
@@ -71,6 +78,7 @@ class main_window(QWidget):
         if ok:
             db.add_schedule(day, str(text))
             db.add_homework(db.take_lesson(day))
+            db.add_comment(db.take_lesson(day))
             lessons = db.get_lessons(day)
             for i in range(9):
                 self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
@@ -91,7 +99,17 @@ class main_window(QWidget):
 
 
     def add_notes(self):
-        pass
+        text, ok = QInputDialog.getText(self, 'Урок',
+                                        'Введите номер урока')
+
+        if ok:
+            text1, ok1 = QInputDialog.getText(self, 'Заметка',
+                                              'Введите заметку')
+            if ok1:
+                db.reset_comment(db.get_id_lesson(day)[-(int(text))], text1)
+                notes = db.get_comment_lesson(day)
+                for i in range(9):
+                    self.table.setItem(i, 2, QTableWidgetItem(notes.pop()))
 
     def previous_day(self):
         global day
@@ -104,6 +122,9 @@ class main_window(QWidget):
         hmrks = db.get_homework_lesson(day)
         for i in range(9):
             self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
+        notes = db.get_comment_lesson(day)
+        for i in range(9):
+            self.table.setItem(i, 2, QTableWidgetItem(notes.pop()))
         self.label_day.setText(db.get_day(day))
 
     def following_day(self):
@@ -117,6 +138,9 @@ class main_window(QWidget):
         hmrks = db.get_homework_lesson(day)
         for i in range(9):
             self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
+        notes = db.get_comment_lesson(day)
+        for i in range(9):
+            self.table.setItem(i, 2, QTableWidgetItem(notes.pop()))
         self.label_day.setText(db.get_day(day))
 
 
