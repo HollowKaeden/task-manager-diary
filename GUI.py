@@ -56,6 +56,11 @@ class main_window(QWidget):
         self.btn4.setGeometry(640, 10, 40, 30)
         self.btn4.setFont(font)
         self.btn4.clicked.connect(self.following_day)
+        self.btn5 = QPushButton(self)
+        self.btn5.setText('Изменить урок')
+        self.btn5.setGeometry(20, 400, 150, 30)
+        self.btn5.setFont(font)
+        self.btn5.clicked.connect(self.name_lesson)
 
         hmrks = db.get_homework_lesson(day)
         for i in range(9):
@@ -143,7 +148,18 @@ class main_window(QWidget):
             self.table.setItem(i, 2, QTableWidgetItem(notes.pop()))
         self.label_day.setText(db.get_day(day))
 
+    def name_lesson(self):
+        text, ok = QInputDialog.getText(self, 'Урок',
+                                        'Введите номер урока')
 
+        if ok:
+            text1, ok1 = QInputDialog.getText(self, 'Новое название',
+                                              'Введите новое название урока')
+            if ok1:
+                db.reset_lesson(db.get_id_lesson(day)[-(int(text))], text1)
+                lessons = db.get_lessons(day)
+                for i in range(9):
+                    self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = main_window()

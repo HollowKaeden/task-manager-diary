@@ -107,3 +107,7 @@ def get_comment_lesson(day):
 def reset_comment(id, text):
     cursor.execute(f'UPDATE COMMENTS SET comment="{text}" WHERE schedule_id=?', (id, )).fetchall()
     conn.commit()
+
+def reset_lesson(id, text):
+    cursor.execute(f'UPDATE SCHEDULE SET name="{text}" WHERE id=?', (id,)).fetchall()
+    conn.commit()
