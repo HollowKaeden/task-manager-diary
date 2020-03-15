@@ -51,8 +51,13 @@ def get_lessons_count(day):
 
 
 def get_homework_lesson(day):
-    return cursor.execute('SELECT * FROM EVENTS ev INNER JOIN SCHEDULE sc ON ev.id = sc.event_id INNER JOIN HOMEWORK hw ON hw.schedule_id = sc.id').fetchall()
-
+    hm = list(map(lambda x: x[0], cursor.execute('''SELECT hm.text FROM EVENTS e 
+    INNER JOIN SCHEDULE s ON e.id = s.event_id INNER JOIN HOMEWORK hm ON s.id = hm.schedule_id
+                             WHERE e.id=?''', (day, )).fetchall()))
+    hm = list(reversed(hm))
+    while len(hm) != 9:
+        hm.insert(0, '')
+    return hm
 
 def take_lesson(day):
     return cursor.execute('SELECT * FROM SCHEDULE WHERE event_id=?', (day, )).fetchall()[-1][0]
@@ -69,7 +74,8 @@ def get_id_lesson(date):
         return lessons
 
 def reset_homework(id, text):
-    cursor.execute(f'UPDATE HOMEWORK SET text={text} WHERE schedule_id=?', (id, ))
+    cursor.execute(f'UPDATE HOMEWORK SET text={text} WHERE schedule_id=?', (id, )).fetchall()
+    conn.commit()
 
 def all_homework_day(day):
     homework = list(map(lambda x: x[0], cursor.execute('''SELECT h.text FROM HOMEWORK hm 
