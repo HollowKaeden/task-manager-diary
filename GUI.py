@@ -67,6 +67,7 @@ class main_window(QWidget):
 
         if ok:
             db.add_schedule(day, str(text))
+            db.add_homework(db.take_lesson(day))
             lessons = db.get_lessons(day)
             for i in range(9):
                 self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
@@ -80,10 +81,10 @@ class main_window(QWidget):
             text1, ok1 = QInputDialog.getText(self, 'ДЗ',
                                               'Введите дз')
             if ok1:
-                print(db.get_lessons(day))
-                db.add_homework(day, str(text))
-
-
+                hmrks = db.get_lessons(day)
+                db.reset_homework(db.get_id_lesson(day)[-(int(text))], text1)
+                for i in range(9):
+                    self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
 
     def add_notes(self):
         pass
