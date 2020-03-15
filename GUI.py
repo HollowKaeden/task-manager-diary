@@ -77,6 +77,12 @@ class main_window(QWidget):
 
     def add_lesson(self):
         global day
+        count = 0
+        for i in db.get_lessons(day):
+            if i != '':
+                count += 1
+        if count == 9:
+            return
         text, ok = QInputDialog.getText(self, 'Урок',
                                         'Введите название урока')
 
