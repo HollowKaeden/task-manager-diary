@@ -21,7 +21,7 @@ def del_events(name):
 
 
 def add_schedule(event_id, name):
-    cursor.execute('INSERT INTO SCHEDULE VALUES (?, ?, ?)', (get_lessons_count(event_id), event_id, name))
+    cursor.execute('INSERT INTO SCHEDULE (event_id, name) VALUES (?, ?)', (event_id, name))
     conn.commit()
 
 
@@ -30,6 +30,7 @@ def get_lessons(date):
                              INNER JOIN SCHEDULE s
                              ON e.id = s.event_id
                              WHERE s.event_id=?''', (date, )).fetchall()))
+    lessons = list(reversed(lessons))
     while len(lessons) != 9:
         lessons.insert(0, '')
     return lessons
@@ -44,5 +45,5 @@ def get_lessons_count(day):
 
 
 connect()
-print(get_lessons_count(1))
-print(get_lessons(1))
+print(get_lessons_count(2))
+print(get_lessons(2))

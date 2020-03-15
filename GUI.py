@@ -40,6 +40,7 @@ class main_window(QWidget):
         self.btn1.setText('Добавить ДЗ')
         self.btn1.setGeometry(190, 10, 150, 30)
         self.btn1.setFont(font)
+        self.btn1.clicked.connect(self.add_homework)
         self.btn2 = QPushButton(self)
         self.btn2.setText('Добавить заметку')
         self.btn2.setGeometry(360, 10, 170, 30)
@@ -71,7 +72,14 @@ class main_window(QWidget):
                 self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
 
     def add_homework(self):
-        pass
+        text, ok = QInputDialog.getText(self, 'Урок',
+                                        'Введите название урока')
+
+        if ok:
+            db.add_schedule(day, str(text))
+            lessons = db.get_lessons(day)
+            for i in range(9):
+                self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
 
     def add_notes(self):
         pass
