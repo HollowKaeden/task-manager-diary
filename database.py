@@ -1,14 +1,4 @@
 # Запросы базе данных
-import sqlite3
-cursor = None
-conn = None
-
-
-def connect():
-    global cursor, conn
-    conn = sqlite3.connect("task_manager_data.db")
-    cursor = conn.cursor()
-
 
 connect()
 
