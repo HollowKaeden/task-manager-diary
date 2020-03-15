@@ -73,13 +73,17 @@ class main_window(QWidget):
 
     def add_homework(self):
         text, ok = QInputDialog.getText(self, 'Урок',
-                                        'Введите название урока')
+                                        'Введите номер урока')
+
 
         if ok:
-            db.add_schedule(day, str(text))
-            lessons = db.get_lessons(day)
-            for i in range(9):
-                self.table.setItem(i, 0, QTableWidgetItem(lessons.pop()))
+            text1, ok1 = QInputDialog.getText(self, 'ДЗ',
+                                              'Введите дз')
+            if ok1:
+                print(db.get_lessons(day))
+                db.add_homework(day, str(text))
+
+
 
     def add_notes(self):
         pass

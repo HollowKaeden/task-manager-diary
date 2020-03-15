@@ -20,6 +20,11 @@ def del_events(name):
     conn.commit()
 
 
+def add_homework(id, text):
+    cursor.execute('INSERT INTO HOMEWORK (schedule_id, text) VALUES (?, ?)', (id, text))
+    conn.commit()
+
+
 def add_schedule(event_id, name):
     cursor.execute('INSERT INTO SCHEDULE (event_id, name) VALUES (?, ?)', (event_id, name))
     conn.commit()
