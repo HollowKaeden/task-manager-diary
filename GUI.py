@@ -81,10 +81,11 @@ class main_window(QWidget):
             text1, ok1 = QInputDialog.getText(self, 'ДЗ',
                                               'Введите дз')
             if ok1:
-                hmrks = db.get_lessons(day)
                 db.reset_homework(db.get_id_lesson(day)[-(int(text))], text1)
+                hmrks = db.get_homework_lesson(day)
                 for i in range(9):
                     self.table.setItem(i, 1, QTableWidgetItem(hmrks.pop()))
+
 
     def add_notes(self):
         pass
